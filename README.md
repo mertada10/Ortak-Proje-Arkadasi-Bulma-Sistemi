@@ -106,7 +106,7 @@ Projede **MySQL** kullanılmaktadır.
 ### 1. Projeyi klonlayın
 
 ```bash
-git clone https://github.com/kullaniciadi/teammate-finder.git
+git clone https://github.com/mertada10/Ortak-Proje-Arkadasi-Bulma-Sistemi.git
 ```
 
 ### 2. XAMPP içerisine taşıyın
@@ -127,20 +127,7 @@ Ardından SQL dosyasını içe aktarın.
 
 ---
 
-### 4. Veritabanı bağlantısını düzenleyin
-
-`config/database.php`
-
-```php
-$host = "localhost";
-$dbname = "teammate_finder";
-$user = "root";
-$pass = "";
-```
-
----
-
-### 5. Apache ve MySQL'i başlatın
+### 4. Apache ve MySQL'i başlatın
 
 XAMPP Control Panel üzerinden;
 
@@ -151,7 +138,7 @@ servislerini çalıştırın.
 
 ---
 
-### 6. Uygulamayı açın
+### 5. Uygulamayı açın
 
 ```text
 http://localhost/teammate-finder
