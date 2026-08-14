@@ -55,7 +55,7 @@
 
    > 💡 Alternatif olarak `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS` ortam değişkenlerini kullanabilirsiniz.
 
-3. **Veritabanını oluşturun** — `teammate_finder` adında bir veritabanı oluşturun (tablolar ilk çalıştırmada otomatik oluşturulur).
+3. **Veritabanını oluşturun** — `teammate_finder` adında bir veritabanı oluşturun (SQL Dosyasını içe aktarın).
 
 4. **Sunucuyu başlatın**
 
