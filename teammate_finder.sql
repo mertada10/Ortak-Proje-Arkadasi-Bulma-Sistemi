@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: 127.0.0.1
--- Üretim Zamanı: 13 Ağu 2026, 12:19:28
+-- Üretim Zamanı: 14 Ağu 2026, 14:12:46
 -- Sunucu sürümü: 10.4.32-MariaDB
 -- PHP Sürümü: 8.2.12
 
@@ -20,6 +20,21 @@ SET time_zone = "+00:00";
 --
 -- Veritabanı: `teammate_finder`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tablo için tablo yapısı `login_attempts`
+--
+
+CREATE TABLE `login_attempts` (
+  `id` int(11) NOT NULL,
+  `login_key` varchar(191) NOT NULL,
+  `ip` varchar(45) NOT NULL,
+  `attempts` int(11) NOT NULL DEFAULT 0,
+  `locked_until` datetime DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -51,7 +66,8 @@ CREATE TABLE `projects` (
   `required_skills` varchar(255) NOT NULL,
   `members_needed` int(11) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `expires_at` date DEFAULT NULL
+  `expires_at` date DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -69,7 +85,8 @@ CREATE TABLE `requests` (
   `message` text DEFAULT NULL,
   `status` enum('pending','accepted','rejected') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `request_type` enum('team_request','project_request') NOT NULL DEFAULT 'project_request'
+  `request_type` enum('team_request','project_request') NOT NULL DEFAULT 'project_request',
+  `sender_seen` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -136,12 +153,20 @@ CREATE TABLE `users` (
   `role` enum('user','admin') DEFAULT 'user',
   `remember_token` varchar(64) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `last_seen` timestamp NULL DEFAULT NULL
+  `last_seen` timestamp NULL DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dökümü yapılmış tablolar için indeksler
 --
+
+--
+-- Tablo için indeksler `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_login_ip` (`login_key`,`ip`);
 
 --
 -- Tablo için indeksler `messages`
@@ -202,6 +227,12 @@ ALTER TABLE `users`
 --
 -- Dökümü yapılmış tablolar için AUTO_INCREMENT değeri
 --
+
+--
+-- Tablo için AUTO_INCREMENT değeri `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Tablo için AUTO_INCREMENT değeri `messages`
