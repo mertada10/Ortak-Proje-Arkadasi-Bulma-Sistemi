@@ -11,7 +11,7 @@ TeamMate Finder, öğrencilerin ortak projelerde birlikte çalışabilecekleri e
 Kullanıcılar;
 
 - 👤 Hesap oluşturabilir.
-- 📢 Proje ilanı paylaşabilir.
+- 📢 Proje oluşturulup ilanı paylaşabilir.
 - 🔍 Diğer kullanıcıların projelerini inceleyebilir.
 - 🤝 Takım daveti gönderebilir.
 - 👥 Takım oluşturabilir.
@@ -29,14 +29,17 @@ Kullanıcılar;
 - Güvenli şifre saklama (`password_hash`)
 - Çıkış yapma
 - Profil düzenleme
+- Şifre düzenleme
 - Profil fotoğrafı yükleme
 - Hakkımda alanı
 - Teknoloji ve ilgi alanı seçimi
+- Hesap silme
 
 ---
 
 ### 📁 Proje Sistemi
 
+- Proje oluşturma
 - Proje ilanı oluşturma
 - Tüm projeleri listeleme
 - AJAX ile anlık proje arama
@@ -61,6 +64,7 @@ Kullanıcılar;
 ### 💬 Mesajlaşma
 
 - Kullanıcılar arası özel mesajlaşma
+- Takımdakilerle grup mesajlaşma
 - AJAX ile anlık mesaj güncelleme
 - Okunmamış mesaj bildirimi
 - Sohbet ekranı
@@ -70,7 +74,7 @@ Kullanıcılar;
 ### 🔔 Bildirimler
 
 - Okunmamış mesaj sayısı
-- Bekleyen takım istekleri
+- Bekleyen istekler
 - Navbar bildirim rozetleri
 
 ---
@@ -96,7 +100,8 @@ Projede **MySQL** kullanılmaktadır.
 - `projects`
 - `teams`
 - `team_members`
-- `team_requests`
+- `team_messages`
+- `requests`
 - `messages`
 
 ---
