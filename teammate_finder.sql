@@ -3,14 +3,12 @@
 -- https://www.phpmyadmin.net/
 --
 -- Anamakine: 127.0.0.1
--- Üretim Zamanı: 14 Ağu 2026, 14:12:46
 -- Sunucu sürümü: 10.4.32-MariaDB
 -- PHP Sürümü: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -158,7 +156,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dökümü yapılmış tablolar için indeksler
+-- İndeksler
 --
 
 --
@@ -181,7 +179,10 @@ ALTER TABLE `messages`
 --
 ALTER TABLE `projects`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `idx_projects_user_id` (`user_id`),
+  ADD KEY `idx_projects_expires_at` (`expires_at`),
+  ADD KEY `idx_projects_updated_at` (`updated_at`);
 
 --
 -- Tablo için indeksler `requests`
@@ -191,7 +192,10 @@ ALTER TABLE `requests`
   ADD KEY `sender_id` (`sender_id`),
   ADD KEY `receiver_id` (`receiver_id`),
   ADD KEY `project_id` (`project_id`),
-  ADD KEY `team_id` (`team_id`);
+  ADD KEY `team_id` (`team_id`),
+  ADD KEY `idx_requests_project_status` (`project_id`,`status`),
+  ADD KEY `idx_requests_sender_receiver` (`sender_id`,`receiver_id`),
+  ADD KEY `idx_requests_status` (`status`);
 
 --
 -- Tablo için indeksler `teams`
@@ -222,98 +226,63 @@ ALTER TABLE `team_messages`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `idx_users_name` (`name`,`surname`),
+  ADD KEY `idx_users_department` (`department`),
+  ADD KEY `idx_users_skills` (`skills`(50));
 
 --
--- Dökümü yapılmış tablolar için AUTO_INCREMENT değeri
+-- AUTO_INCREMENT Ayarları
 --
 
---
--- Tablo için AUTO_INCREMENT değeri `login_attempts`
---
 ALTER TABLE `login_attempts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- Tablo için AUTO_INCREMENT değeri `messages`
---
 ALTER TABLE `messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- Tablo için AUTO_INCREMENT değeri `projects`
---
 ALTER TABLE `projects`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- Tablo için AUTO_INCREMENT değeri `requests`
---
 ALTER TABLE `requests`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- Tablo için AUTO_INCREMENT değeri `teams`
---
 ALTER TABLE `teams`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- Tablo için AUTO_INCREMENT değeri `team_members`
---
 ALTER TABLE `team_members`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- Tablo için AUTO_INCREMENT değeri `team_messages`
---
 ALTER TABLE `team_messages`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
---
--- Tablo için AUTO_INCREMENT değeri `users`
---
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Dökümü yapılmış tablolar için kısıtlamalar
+-- Kısıtlamalar (Foreign Keys)
 --
 
---
--- Tablo kısıtlamaları `messages`
---
 ALTER TABLE `messages`
   ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
---
--- Tablo kısıtlamaları `projects`
---
 ALTER TABLE `projects`
   ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
---
--- Tablo kısıtlamaları `requests`
---
 ALTER TABLE `requests`
   ADD CONSTRAINT `requests_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `requests_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `requests_ibfk_3` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `requests_ibfk_team` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE;
 
---
--- Tablo kısıtlamaları `teams`
---
 ALTER TABLE `teams`
   ADD CONSTRAINT `teams_ibfk_1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
---
--- Tablo kısıtlamaları `team_members`
---
 ALTER TABLE `team_members`
   ADD CONSTRAINT `team_members_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `team_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
